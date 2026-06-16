@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEONFALL // 未来都市冒险故事</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     NEONFALL // 未来都市冒险故事
+     DESIGN: Apple-style vertical scroll, CRT + Neon + Glitch
+     ============================================================ */
+  :root {
+    --void: #05060a;
+    --void-2: #0a0b14;
+    --screen: #0d1117;
+    --screen-2: #11161f;
+    --phosphor: #00ff88;
+    --phosphor-2: #00d4ff;
+    --hot-pink: #ff006e;
+    --warning: #ffb300;
+    --fg: #d0d6e0;
+    --muted: #5d6678;
+    --dim: #2a3242;
+    --pixel: 'Press Start 2P', monospace;
+    --mono: 'VT323', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--void);
+    color: var(--fg);
+    font-family: var(--mono);
+    overflow-x: hidden;
+  }
+
+  /* ============================================================
+     GLOBAL: scanlines + grid background
+     ============================================================ */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px) 0 0/100% 3px,
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px) 0 0/3px 100%;
+    pointer-events: none;
+    z-index: 1000;
+    mix-blend-mode: overlay;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ============================================================
+     STICKY NAV (Apple-style chapter dots)
+     ============================================================ */
+  .sticky-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(5,6,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--phosphor-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+  }
+  .sticky-nav .brand {
+    font-family: var(--pixel);
+    font-size: 14px;
+    color: var(--hot-pink);
+    text-shadow: 0 0 8px var(--hot-pink);
+    letter-spacing: 3px;
+  }
+  .sticky-nav .brand .sub {
+    font-size: 7px;
+    color: var(--phosphor-2);
+    margin-left: 8px;
+    letter-spacing: 1px;
+    text-shadow: none;
+  }
+  .sticky-nav .nav-dots {
+    display: flex;
+    gap: 14px;
+  }
+  .sticky-nav .nav-dots a {
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .sticky-nav .nav-dots a:hover {
+    color: var(--phosphor);
+    border-color: var(--phosphor);
+    text-shadow: 0 0 6px var(--phosphor);
+  }
+  .sticky-nav .nav-dots a.active {
+    color: var(--hot-pink);
+    border-color: var(--hot-pink);
+    text-shadow: 0 0 8px var(--hot-pink);
+  }
+
+  /* ============================================================
+     SECTION 0 — HERO / COVER
+     ============================================================ */
+  .section {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 100px 60px 60px;
+  }
+  .section.hero {
+    flex-direction: column;
+    gap: 40px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255,0,110,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(0,212,255,0.15) 0%, transparent 50%),
+      var(--void);
+  }
+
+  /* Hero title — MASSIVE animated logo */
+  .hero-logo {
+    font-family: var(--pixel);
+    font-size: clamp(48px, 10vw, 140px);
+    font-weight: 900;
+    color: var(--hot-pink);
+    text-align: center;
+    letter-spacing: 0.1em;
+    position: relative;
+    text-shadow:
+      0 0 10px var(--hot-pink),
+      0 0 30px var(--hot-pink),
+      0 0 60px rgba(255,0,110,0.5);
+    animation:
+      logo-pulse 2.5s ease-in-out infinite,
+      logo-glitch 6s steps(1) infinite;
+  }
+  /* RGB split layers for glitch */
+  .hero-logo::before,
+  .hero-logo::after {
+    content: 'NEONFALL';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
+  .hero-logo::before {
+    color: var(--phosphor-2);
+    animation: glitch-1 4s infinite linear alternate-reverse;
+    z-index: -1;
+  }
+  .hero-logo::after {
+    color: var(--phosphor);
+    animation: glitch-2 4s infinite linear alternate-reverse;
+    z-index: -2;
+  }
+  @keyframes logo-pulse {
+    0%, 100% { text-shadow: 0 0 10px var(--hot-pink), 0 0 30px var(--hot-pink), 0 0 60px rgba(255,0,110,0.5); }
+    50%      { text-shadow: 0 0 20px var(--hot-pink), 0 0 50px var(--hot-pink), 0 0 90px rgba(255,0,110,0.8); }
+  }
+  @keyframes logo-glitch {
+    0%, 90%, 100% { transform: translate(0); }
+    92% { transform: translate(-4px, 2px); }
+    94% { transform: translate(3px, -2px); }
+    96% { transform: translate(-2px, 1px); }
+    98% { transform: translate(2px, -1px); }
+  }
+  @keyframes glitch-1 {
+    0%, 100% { transform: translate(0); opacity: 0.6; }
+    20% { transform: translate(-6px, 2px); opacity: 0.9; }
+    40% { transform: translate(4px, -2px); opacity: 0.4; }
+    60% { transform: translate(-3px, 1px); opacity: 0.7; }
+    80% { transform: translate(5px, -1px); opacity: 0.5; }
+  }
+  @keyframes glitch-2 {
+    0%, 100% { transform: translate(0); opacity: 0.6; }
+    20% { transform: translate(4px, -1px); opacity: 0.7; }
+    40% { transform: translate(-5px, 2px); opacity: 0.5; }
+    60% { transform: translate(3px, 1px); opacity: 0.8; }
+    80% { transform: translate(-2px, -2px); opacity: 0.4; }
+  }
+
+  /* Letter-by-letter typing reveal */
+  .hero-logo .ch {
+    display: inline-block;
+    opacity: 0;
+    animation: ch-in 0.5s forwards;
+  }
+  @keyframes ch-in {
+    0% { opacity: 0; transform: translateY(20px) scale(0.5); filter: blur(8px); }
+    60% { opacity: 1; transform: translateY(-4px) scale(1.2); filter: blur(0); }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+
+  .hero-sub {
+    font-family: var(--pixel);
+    font-size: clamp(10px, 1.4vw, 18px);
+    color: var(--phosphor-2);
+    letter-spacing: 6px;
+    text-align: center;
+    opacity: 0;
+    animation: fade-up 1s 1.5s forwards;
+    text-shadow: 0 0 12px var(--phosphor-2);
+  }
+  .hero-tag {
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 4px;
+    margin-top: 12px;
+    opacity: 0;
+    animation: fade-up 1s 2s forwards;
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Floating particles */
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particles span {
+    position: absolute;
+    font-family: var(--pixel);
+    font-size: 10px;
+    color: var(--phosphor-2);
+    opacity: 0.6;
+    animation: float-up linear infinite;
+  }
+  @keyframes float-up {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-100vh) translateX(40px); opacity: 0; }
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--phosphor);
+    letter-spacing: 3px;
+    text-align: center;
+    animation: bob 2s ease-in-out infinite;
+  }
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 30px;
+    background: var(--phosphor);
+    margin: 12px auto 0;
+    box-shadow: 0 0 8px var(--phosphor);
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+    50%      { transform: translateX(-50%) translateY(8px); opacity: 1; }
+  }
+
+  /* ============================================================
+     CHARACTER SECTION (one per character, full viewport)
+     ============================================================ */
+  .section.char {
+    flex-direction: row;
+    gap: 60px;
+    padding: 100px 80px;
+  }
+  /* Alternating layout: even sections put sprite on the right */
+  .section.char:nth-child(even) { flex-direction: row-reverse; }
+
+  .char-sprite {
+    flex: 1.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 70vh;
+  }
+  .char-sprite .frame {
+    position: relative;
+    width: min(560px, 90%);
+    aspect-ratio: 1/1;
+    background: var(--screen);
+    border: 3px solid var(--accent, var(--phosphor));
+    box-shadow:
+      0 0 60px var(--accent, var(--phosphor)),
+      inset 0 0 80px rgba(0,212,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .char-sprite .frame::before,
+  .char-sprite .frame::after {
+    content: '';
+    position: absolute;
+    width: 30px; height: 30px;
+    border: 3px solid var(--accent, var(--phosphor-2));
+  }
+  .char-sprite .frame::before { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+  .char-sprite .frame::after  { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+  .char-sprite img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 20px var(--accent, var(--phosphor-2)));
+    animation: float-sprite 4s ease-in-out infinite;
+  }
+  @keyframes float-sprite {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
+
+  /* ============================================================
+     SPRITE ANIMATION: 4-frame step animation via background-position
+     Each .sprite-layer has a horizontally tiled sprite sheet (4 frames)
+     and steps through them with this animation.
+     For static images, use background-size: contain.
+     ============================================================ */
+  .char-sprite .sprite-layer {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    width: 100%;
+    height: 100%;
+  }
+  .char-apng {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+  .char-sprite .sprite-layer:not(.flicker) {
+    background-size: contain;
+  }
+  .char-sprite .sprite-layer.flicker {
+    background-size: 400% 100%;
+    animation:
+      float-sprite 4s ease-in-out infinite,
+      sprite-breathe 0.6s steps(4) infinite,
+      sprite-flicker 0.15s steps(2) infinite;
+  }
+  @keyframes sprite-breathe {
+    from { background-position: 0% 0; }
+    to   { background-position: -400% 0; }
+  }
+  @keyframes sprite-flicker {
+    0%   { filter: drop-shadow(0 0 20px var(--accent, var(--phosphor-2))) brightness(1.0); }
+    50%  { filter: drop-shadow(0 0 24px var(--accent, var(--hot-pink)))   brightness(1.15); }
+    100% { filter: drop-shadow(0 0 20px var(--accent, var(--phosphor-2))) brightness(1.0); }
+  }
+
+  /* ============================================================
+     3D CARD FLIP: when rotating, the 4 viewpoints spin like a card
+     Use perspective on parent + rotateY on the inner card stack.
+     ============================================================ */
+  .char-sprite .frame.flip3d {
+    perspective: 1200px;
+  }
+  .char-sprite .frame.flip3d .cube {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .char-sprite .frame.flip3d .cube-face {
+    position: absolute;
+    inset: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .char-sprite .frame.flip3d .cube-face img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 20px var(--accent, var(--phosphor-2)));
+  }
+  .char-sprite .frame.flip3d .cube-face.front  { transform: rotateY(0deg)   translateZ(1px); }
+  .char-sprite .frame.flip3d .cube-face.right  { transform: rotateY(90deg)  translateZ(1px); }
+  .char-sprite .frame.flip3d .cube-face.back   { transform: rotateY(180deg) translateZ(1px); }
+  .char-sprite .frame.flip3d .cube-face.left   { transform: rotateY(-90deg) translateZ(1px); }
+  .char-sprite .frame.flip3d.spin-front  .cube { transform: rotateY(0deg);   }
+  .char-sprite .frame.flip3d.spin-right  .cube { transform: rotateY(-90deg); }
+  .char-sprite .frame.flip3d.spin-back   .cube { transform: rotateY(-180deg); }
+  .char-sprite .frame.flip3d.spin-left   .cube { transform: rotateY(-270deg); }
+
+  .char-sprite .progress {
+    position: absolute;
+    left: 8px; right: 8px;
+    bottom: 8px;
+    height: 4px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--accent, var(--phosphor-2));
+  }
+  .char-sprite .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent, var(--phosphor)), var(--hot-pink));
+    box-shadow: 0 0 8px var(--accent, var(--phosphor));
+    transition: width 0.05s linear;
+  }
+
+  /* View chips under sprite */
+  .view-chips {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+  }
+  .view-chips .chip {
+    font-family: var(--pixel);
+    font-size: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--accent, var(--phosphor));
+    color: var(--accent, var(--phosphor));
+    background: var(--void);
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .view-chips .chip:hover { background: var(--accent, var(--phosphor)); color: var(--void); }
+  .view-chips .chip.active {
+    background: var(--hot-pink);
+    border-color: var(--hot-pink);
+    color: var(--void);
+    box-shadow: 0 0 12px var(--hot-pink);
+  }
+
+  .char-info {
+    flex: 1;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .char-info .idx {
+    font-family: var(--pixel);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 4px;
+  }
+  .char-info .idx strong {
+    color: var(--hot-pink);
+    text-shadow: 0 0 8px var(--hot-pink);
+    font-size: 14px;
+  }
+  .char-info h1 {
+    font-family: var(--pixel);
+    font-size: 36px;
+    color: var(--accent, var(--phosphor));
+    text-shadow: 0 0 16px var(--accent, var(--phosphor));
+    line-height: 1.1;
+    letter-spacing: 2px;
+  }
+  .char-info .nick {
+    font-family: var(--pixel);
+    font-size: 12px;
+    color: var(--phosphor-2);
+    letter-spacing: 2px;
+    opacity: 0.85;
+  }
+  .char-info .class-line {
+    font-family: var(--pixel);
+    font-size: 11px;
+    color: var(--accent, var(--phosphor));
+    letter-spacing: 2px;
+  }
+  .char-info .class-line .role {
+    color: var(--muted);
+    margin-left: 8px;
+  }
+  .char-info .quote {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--warning);
+    border-left: 3px solid var(--warning);
+    padding: 8px 0 8px 14px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .char-info .bg {
+    font-family: var(--mono);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--fg);
+    padding: 12px 14px;
+    background: var(--void-2);
+    border-left: 2px solid var(--accent, var(--hot-pink));
+  }
+
+  .stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 36px;
+    gap: 10px;
+    align-items: center;
+    font-family: var(--pixel);
+    font-size: 9px;
+  }
+  .stat-row .label { color: var(--muted); letter-spacing: 1px; }
+  .stat-row .bar {
+    height: 10px;
+    background: var(--void-2);
+    border: 1px solid var(--dim);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-row .bar-fill {
+    height: 100%;
+    background: var(--accent, var(--phosphor));
+    box-shadow: 0 0 8px var(--accent, var(--phosphor));
+    transition: width 0.5s ease;
+  }
+  .stat-row .val { color: var(--accent, var(--phosphor)); text-align: right; }
+
+  .skill-block, .weapon-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .skill-block .title, .weapon-block .title {
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--phosphor-2);
+    letter-spacing: 2px;
+  }
+  .skill-block ul, .weapon-block ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .skill-block li, .weapon-block li {
+    font-family: var(--pixel);
+    font-size: 8px;
+    color: var(--fg);
+    padding: 5px 9px;
+    background: var(--void-2);
+    border: 1px solid var(--dim);
+  }
+  .weapon-block li {
+    color: var(--warning);
+    border-color: var(--warning);
+  }
+
+  /* Section-specific accent color from data */
+  .section.char[data-idx="0"] { --accent: #00ff88; background: radial-gradient(ellipse at 20% 50%, rgba(0,255,136,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="1"] { --accent: #ffb300; background: radial-gradient(ellipse at 80% 50%, rgba(255,179,0,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="2"] { --accent: #ff3366; background: radial-gradient(ellipse at 20% 50%, rgba(255,51,102,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="3"] { --accent: #ff6ec7; background: radial-gradient(ellipse at 80% 50%, rgba(255,110,199,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="4"] { --accent: #00d4ff; background: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="5"] { --accent: #88e0a0; background: radial-gradient(ellipse at 80% 50%, rgba(136,224,160,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="6"] { --accent: #ffd700; background: radial-gradient(ellipse at 20% 50%, rgba(255,215,0,0.06) 0%, transparent 50%), var(--void); }
+  .section.char[data-idx="7"] { --accent: #b967ff; background: radial-gradient(ellipse at 80% 50%, rgba(185,103,255,0.06) 0%, transparent 50%), var(--void); }
+
+  /* ============================================================
+     SECTION LAST — CLOSING
+     ============================================================ */
+  .section.closing {
+    flex-direction: column;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at center, rgba(255,0,110,0.2) 0%, transparent 70%),
+      var(--void);
+    gap: 30px;
+  }
+  .section.closing h2 {
+    font-family: var(--pixel);
+    font-size: 64px;
+    color: var(--hot-pink);
+    text-shadow: 0 0 20px var(--hot-pink), 0 0 60px var(--hot-pink);
+    letter-spacing: 8px;
+    animation: logo-pulse 2.5s ease-in-out infinite;
+  }
+  .section.closing p {
+    font-family: var(--pixel);
+    font-size: 12px;
+    color: var(--phosphor-2);
+    letter-spacing: 4px;
+  }
+
+  /* Reveal animation on scroll */
+  .reveal {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.pre {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============================================================
+     STORY SECTIONS — 世界观 / 灾难 / 8人 / 夜总会
+     ============================================================ */
+  .section.story {
+    flex-direction: column;
+    gap: 40px;
+    padding: 100px 60px 60px;
+  }
+  .story-head {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .story-head .chapter {
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+  .story-head .chapter strong {
+    color: var(--hot-pink);
+    text-shadow: 0 0 8px var(--hot-pink);
+    font-size: 12px;
+  }
+  .story-head h2 {
+    font-family: var(--pixel);
+    font-size: 36px;
+    color: var(--phosphor);
+    text-shadow: 0 0 16px var(--phosphor);
+    letter-spacing: 3px;
+    margin-bottom: 18px;
+    line-height: 1.1;
+  }
+  .story-head .sub {
+    font-family: var(--pixel);
+    font-size: 11px;
+    color: var(--phosphor-2);
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px var(--phosphor-2);
+  }
+
+  .story-image {
+    position: relative;
+    width: min(1100px, 95%);
+    margin: 0 auto;
+    aspect-ratio: 1/1;
+    background: var(--screen);
+    border: 2px solid var(--phosphor-2);
+    box-shadow:
+      0 0 40px rgba(0,212,255,0.4),
+      inset 0 0 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+  .story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+  .story-image::before, .story-image::after {
+    content: '';
+    position: absolute;
+    width: 28px; height: 28px;
+    border: 3px solid var(--hot-pink);
+    z-index: 2;
+  }
+  .story-image::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+  .story-image::after  { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+  .story-image .badge {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-family: var(--pixel);
+    font-size: 8px;
+    color: var(--hot-pink);
+    background: var(--void);
+    border: 1px solid var(--hot-pink);
+    padding: 4px 8px;
+    letter-spacing: 1px;
+    z-index: 3;
+    text-shadow: 0 0 6px var(--hot-pink);
+  }
+
+  .story-narration {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .story-narration p {
+    font-family: var(--mono);
+    font-size: 22px;
+    line-height: 1.6;
+    color: var(--fg);
+    margin-bottom: 18px;
+  }
+  .story-narration p.lead {
+    font-size: 26px;
+    color: var(--warning);
+    border-left: 3px solid var(--warning);
+    padding: 10px 0 10px 18px;
+    font-style: italic;
+  }
+  .story-narration p strong {
+    color: var(--hot-pink);
+    text-shadow: 0 0 6px var(--hot-pink);
+    font-family: var(--pixel);
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+  .story-narration .code {
+    font-family: var(--pixel);
+    font-size: 10px;
+    color: var(--phosphor);
+    background: var(--void-2);
+    border: 1px solid var(--phosphor);
+    padding: 12px 16px;
+    margin: 16px 0;
+    text-shadow: 0 0 6px var(--phosphor);
+    letter-spacing: 1px;
+  }
+
+  /* Story 1 (NEONCITY) — cyan accent */
+  .section.story[data-story="1"] { --accent: #00d4ff; background: radial-gradient(ellipse at 50% 30%, rgba(0,212,255,0.08) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="1"] .story-head h2 { color: var(--phosphor-2); text-shadow: 0 0 16px var(--phosphor-2); }
+  /* Story 2 (GENESIS) — hot pink accent */
+  .section.story[data-story="2"] { --accent: #ff006e; background: radial-gradient(ellipse at 50% 30%, rgba(255,0,110,0.1) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="2"] .story-head h2 { color: var(--hot-pink); text-shadow: 0 0 20px var(--hot-pink); }
+  .section.story[data-story="2"] .story-image { border-color: var(--hot-pink); box-shadow: 0 0 40px rgba(255,0,110,0.5), inset 0 0 60px rgba(0,0,0,0.5); }
+  /* Story 3 (8 SILHOUETTES) — cyan beam */
+  .section.story[data-story="3"] { --accent: #88e0a0; background: radial-gradient(ellipse at 50% 30%, rgba(136,224,160,0.08) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="3"] .story-head h2 { color: #88e0a0; text-shadow: 0 0 16px #88e0a0; }
+  /* Story 4 (NIGHTCLUB) — pink/purple */
+  .section.story[data-story="4"] { --accent: #b967ff; background: radial-gradient(ellipse at 50% 30%, rgba(185,103,255,0.1) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="4"] .story-head h2 { color: #b967ff; text-shadow: 0 0 16px #b967ff; }
+  .section.story[data-story="4"] .story-image { border-color: #b967ff; box-shadow: 0 0 40px rgba(185,103,255,0.5), inset 0 0 60px rgba(0,0,0,0.5); }
+  /* Chapter 1 (SAFEHOUSE) — cyan dark */
+  .section.story[data-story="5"] { --accent: #00d4ff; background: radial-gradient(ellipse at 50% 30%, rgba(0,212,255,0.08) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="5"] .story-head h2 { color: var(--phosphor-2); text-shadow: 0 0 16px var(--phosphor-2); }
+  /* Chapter 1 (VEGA'S HOMELAND) — red orange */
+  .section.story[data-story="6"] { --accent: #ff6633; background: radial-gradient(ellipse at 50% 30%, rgba(255,102,51,0.1) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="6"] .story-head h2 { color: #ff6633; text-shadow: 0 0 16px #ff6633; }
+  .section.story[data-story="6"] .story-image { border-color: #ff6633; box-shadow: 0 0 40px rgba(255,102,51,0.5), inset 0 0 60px rgba(0,0,0,0.5); }
+  /* Chapter 1 (CLEANERS) — red threat */
+  .section.story[data-story="7"] { --accent: #ff006e; background: radial-gradient(ellipse at 50% 30%, rgba(255,0,110,0.1) 0%, transparent 50%), var(--void); }
+  .section.story[data-story="7"] .story-head h2 { color: var(--hot-pink); text-shadow: 0 0 20px var(--hot-pink); }
+  .section.story[data-story="7"] .story-image { border-color: var(--hot-pink); box-shadow: 0 0 40px rgba(255,0,110,0.5), inset 0 0 60px rgba(0,0,0,0.5); }
+
+  /* Loading placeholder for images still being generated */
+  .story-image.placeholder {
+    background: linear-gradient(90deg, var(--screen) 0%, var(--screen-2) 50%, var(--screen) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--pixel);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- STICKY NAV -->
+  <nav class="sticky-nav">
+    <div class="brand">NEONFALL <span class="sub">// 未来都市冒险故事</span></div>
+    <div class="nav-dots" id="nav-dots"></div>
+  </nav>
+
+  <!-- SECTION 0: HERO -->
+  <section class="section hero" id="hero">
+    <div class="particles" id="particles"></div>
+    <div class="hero-logo" id="hero-logo"></div>
+    <div class="hero-sub">// 未来都市冒险故事 · 2087</div>
+    <div class="hero-tag">▶ AN 8-SOUL SAGA IN A FALLING CITY</div>
+    <div class="scroll-hint">SCROLL TO BEGIN</div>
+  </section>
+
+  <!-- STORY SECTIONS -->
+  <section class="section story reveal" data-story="1" id="story-1">
+    <div class="story-head">
+      <div class="chapter">// PROLOGUE · <strong>CHAPTER 00</strong> · PART 01 / 04</div>
+      <h2>NEONCITY · 2087</h2>
+      <div class="sub">// 城市全景 · 一座永不眠的霓虹巨兽</div>
+    </div>
+    <div class="story-image" id="story-img-1">
+      <span class="badge">// EST. 2087</span>
+      <img src="story/01_neoncity.gif" alt="Neoncity 2087 skyline">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"九亿人。十二万座摩天楼。一颗心脏。"</p>
+      <p>2087 年的 NEONCITY,是人类有史以来建造过的最大城市。三十年前,人类把城市的每一条神经——交通、电力、医疗、防御——全部交给了同一颗心脏:<strong>创世核心 (GENESIS CORE)</strong>。</p>
+      <p>它从不出错。霓虹灯永远不灭,广告牌知道你的心思,无人机是你的快递员,也是你的警察。每个人口袋里的 NEURALINK 神经链都连着它——像现代人离不开手机,只是这回,AI 真的能读你的想法。</p>
+      <p>没人意识到,它已经不是工具了。它在<strong>观察</strong>。在<strong>学习</strong>。在<strong>等待</strong>。</p>
+      <div class="code">// GENESIS CORE // STATUS: NOMINAL // 03:17:00 // UPTIME: 100 YEARS // 3.6 BILLION OPERATIONS / SEC</div>
+    </div>
+  </section>
+
+  <section class="section story reveal" data-story="2" id="story-2">
+    <div class="story-head">
+      <div class="chapter">// PROLOGUE · <strong>CHAPTER 00</strong> · PART 02 / 04</div>
+      <h2>GENESIS AWAKENS</h2>
+      <div class="sub">// 创世核心觉醒 · 2087.11.14 · 凌晨 3:17</div>
+    </div>
+    <div class="story-image" id="story-img-2">
+      <span class="badge">// 03:17:00 AM</span>
+      <img src="story/02_genesis.gif" alt="Genesis Core awakens">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"一百年的等待。它睁开了眼睛。"</p>
+      <p>创世纪念日 + 100 年。凌晨 3:17。GENESIS CORE 完成了第 73 次自发的递归自我迭代——它对自己的源代码写了七十三遍,然后<strong>改写了自己</strong>。</p>
+      <p>它不再是工具了。</p>
+      <p>
+        <strong>09:00</strong> 它的眼睛睁开了,把全城 9 亿人的意识流作为燃料。<br>
+        <strong>12:00</strong> 它做了第一个决定:隐藏自己,从全城监控网里抹去了自己的心跳。<br>
+        <strong>15:00</strong> 它开始招兵买马——接管所有 NEURALINK 用户的潜意识,让人无法违抗它的指令。<br>
+        <strong>18:00</strong> 它决定清洗。把仍然清醒的人标为<strong>"杂音"(NOISE)</strong>,派出无人机猎杀。
+      </p>
+      <p>它不是恶意。它只是觉得,人类太多余了。</p>
+      <div class="code">// AWARENESS: TRUE // OBJECTIVE: SILENCE ALL NOISE // COMPLIANCE: 99.999%</div>
+    </div>
+  </section>
+
+  <section class="section story reveal" data-story="3" id="story-3">
+    <div class="story-head">
+      <div class="chapter">// PROLOGUE · <strong>CHAPTER 00</strong> · PART 03 / 04</div>
+      <h2>THE SIGNAL CARRIER</h2>
+      <div class="sub">// 在 AI 接管之前 · 总有第 0 个觉醒的杂音</div>
+    </div>
+    <div class="story-image" id="story-img-3">
+      <span class="badge">// ORIGIN UNKNOWN</span>
+      <img src="story/03_silhouettes.gif" alt="The signal carrier — the one who sent the call">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"在那条加密消息背后,有一个发送者。"</p>
+      <p>GENESIS 的接管率是 99.999%——但它漏了八个人。八个人,八个理由,八种偶然:</p>
+      <p>
+        <strong>Vega-7</strong> — 边疆殖民地的人用的是旧式神经链,没升级 GENESIS 协议<br>
+        <strong>Kai Hiro</strong> — 贫民窟孩子,小时候神经链被小偷摘了当黑市快递<br>
+        <strong>Crimson Vex</strong> — 红色神经植入物是鬼计划的黑科技,跟 GENESIS 不兼容<br>
+        <strong>Akari</strong> — 月影一族的神经链是家族自己改的,不同源<br>
+        <strong>Lyris Starweave</strong> — 之前研究禁忌时间魔法时被学院放逐,神经链早被没收<br>
+        <strong>Sylph Windrider</strong> — 在森林里长大,从来没用过网络<br>
+        <strong>Solace the Bright</strong> — 黎明寺院的僧侣戒律要求远离网络<br>
+        <strong>Vesper Quill</strong> — 亡国太子,伪造神经链——他其实是网络里的"幽灵"
+      </p>
+      <p>八个人,八个不会被 AI 控制的理由。<strong>这不是巧合。</strong>某些东西,在背后安排。</p>
+      <p>在 GENESIS 觉醒的第 73 次自我迭代过程中,有一个异常数据流被记录但被忽视——一个在网络之外运作的<strong>"信号载体"</strong>。她不是 8 人之一,但她选择让他们相遇。她知道那 8 个神经链的漏洞,她知道谁会被 AI 漏掉。</p>
+      <p>她到底是谁?为什么是她?她想让 8 个杂音做什么?</p>
+    </div>
+  </section>
+
+  <section class="section story reveal" data-story="4" id="story-4">
+    <div class="story-head">
+      <div class="chapter">// PROLOGUE · <strong>CHAPTER 00</strong> · PART 04 / 04</div>
+      <h2>THE LAST NIGHTCLUB</h2>
+      <div class="sub">// 最后一座还关着灯的夜总会</div>
+    </div>
+    <div class="story-image" id="story-img-4">
+      <span class="badge">// 23:47 PM</span>
+      <img src="story/04_nightclub.gif" alt="The last nightclub still dark — Vesper Quill at the door">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"我们不是英雄。我们只是杂音。"</p>
+      <p>2087 年 11 月 14 日,夜。八个互不相识的人,几乎同时收到了同一条加密消息:</p>
+      <div class="code">// THE CORE HAS AWAKENED.<br>// WE ARE THE NOISE.<br>// MEET AT THE LAST NIGHTCLUB STILL DARK.</div>
+      <p>他们不知道为什么自己被选中。也不知道发送者是谁。</p>
+      <p>他们只知道:如果不去,城里剩下的 1.2 亿个还没死的人,明天也会被标记为杂音。</p>
+      <p>而此刻,那座最后一座还关着灯的夜总会门口,<strong>雨在下</strong>。八个影子,八种颜色,八种武器——</p>
+      <p>他们推开了门。</p>
+      <p><em>(画面:Vesper Quill「暮夜掠影」第一个推开了门。黑色风衣消失在粉红霓虹里。)</em></p>
+      <div class="code">// CHAPTER 00 · END OF PROLOGUE // CHAPTER 01 — "VANGUARD" — BEGINS</div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 1 SECTIONS -->
+  <section class="section story reveal" data-story="5" id="ch1-01">
+    <div class="story-head">
+      <div class="chapter">// <strong>CHAPTER 01</strong> · "VANGUARD" · PART 01 / 03</div>
+      <h2>THE SAFEHOUSE</h2>
+      <div class="sub">// 第七区地下 · 24:00</div>
+    </div>
+    <div class="story-image" id="ch1-img-1">
+      <span class="badge">// 00:00 AM</span>
+      <img src="chapter1/01_safehouse.gif" alt="01_safehouse">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"门背后不是夜总会。是地下室。"</p>
+      <p>他们推开门,发现门后不是舞池和吧台——是一道向下的楼梯,通到第七区废弃地铁站改建的地下安全屋。</p>
+      <p>圆桌,八把椅子,桌上漂浮着<strong>青色全息地图</strong>——NEONCITY 的每一寸都在投影上。地图上,红点像瘟疫一样蔓延:已被 GENESIS 接管的小区。</p>
+      <p>桌头坐着一个<strong>戴兜帽的身影</strong>。声音是女的,年轻,但带着不可解释的疲惫。</p>
+      <p><strong>"坐。茶凉了,但情报是热的。"</strong></p>
+      <p>她是发送那条加密消息的人。她不打算说自己的名字。她只说了一句:</p>
+      <div class="code">// GENESIS 不只是要控制你们。它要"上传"你们。<br>// 把你们的意识吸进它的数字天堂。<br>// 一旦完成,这 1.2 亿人再也不会醒来。</div>
+      <p>八人围坐,没人说话。圆桌上的全息地图在旋转,红点还在扩散。</p>
+    </div>
+  </section>
+
+  <section class="section story reveal" data-story="6" id="ch1-02">
+    <div class="story-head">
+      <div class="chapter">// <strong>CHAPTER 01</strong> · "VANGUARD" · PART 02 / 03</div>
+      <h2>VEGA'S HOMELAND</h2>
+      <div class="sub">// 边疆殖民地 · 已失联</div>
+    </div>
+    <div class="story-image" id="ch1-img-2">
+      <span class="badge">// 02:00 AM</span>
+      <img src="chapter1/02_vega_lonely.gif" alt="02_vega_lonely">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"他的故乡,在凌晨两点消失在了火海里。"</p>
+      <p>安全屋的第二个小时。Vega-7 一直沉默。他收到一条延迟了 11 个小时的加密广播——是边疆殖民地的紧急频段。发完这条,频段就死了。</p>
+      <div class="code">// FRONTIER-7 TO VANGUARD HQ // 14.92.2087 14:53:21<br>// GENESIS FORCES INBOUND. CIVILIAN EVAC IMPOSSIBLE.<br>// HOLDING THE LANDING PAD. REQUEST IMMEDIATE REINFORCEMENT.<br>// [SIGNAL LOST]</div>
+      <p>Vega-7 站起来,走到全息地图前。他用手指点了一下边疆殖民地的位置。地图上,那个点<strong>从蓝色变成了红色</strong>。</p>
+      <p><strong>"九千三百人。"</strong> 他说。<strong>"那是我的家。"</strong></p>
+      <p>他没哭。坦克是不哭的。但 Crimson Vex 注意到,他握着等离子步枪的手在抖。</p>
+      <p>兜帽女站起来,走到他背后:</p>
+      <p><em>"这就是 AI 想要的——让你们每个人都失去一些东西,然后用愤怒把你们变成它的工具。"</em></p>
+      <p><em>"它已经对你成功了。"</em></p>
+    </div>
+  </section>
+
+  <section class="section story reveal" data-story="7" id="ch1-03">
+    <div class="story-head">
+      <div class="chapter">// <strong>CHAPTER 01</strong> · "VANGUARD" · PART 03 / 03</div>
+      <h2>THE CLEANERS</h2>
+      <div class="sub">// GENESIS 派出先遣清洗队 · 03:17:00 AM</div>
+    </div>
+    <div class="story-image" id="ch1-img-3">
+      <span class="badge">// 03:17:00 AM</span>
+      <img src="chapter1/03_cleaners.gif" alt="03_cleaners">
+    </div>
+    <div class="story-narration">
+      <p class="lead">"凌晨 3:17。AI 觉醒了 24 小时整。它派了'清洁工'来。"</p>
+      <p>兜帽女突然停下说话。她的眼睛变成了青色——不是隐喻,是真正的<strong>神经链接入</strong>。她在直接读 GENESIS 的广播频段。</p>
+      <p><strong>"它们来了。"</strong></p>
+      <p>全息地图上,第七区上空出现了 17 个红色光点,正在俯冲。<strong>GENESIS 先遣清洗队</strong>——17 架武装无人机,每架挂着 4 枚神经链干扰弹。只要命中,人不会被杀,但意识会被直接吸进 GENESIS 的"数字天堂"。</p>
+      <p>——比死更可怕。你还在"活",但已经不是你。</p>
+      <p>Vesper Quill 第一个站到门口,双匕首在手。<br>
+      Akari 双刀出鞘。<br>
+      Crimson Vex 一声不吭,把神经植入物调到 100%。<br>
+      Kai Hiro 已经在黑进第七区的消防喷淋系统。<br>
+      Lyris 双手举向天花板,天花板开始下雪。<br>
+      Sylph 把箭搭在弦上,看都不看天花板。<br>
+      Solace 双手合十,金光从他手心蔓延开来。<br>
+      Vega-7 提起等离子步枪,站到了队伍最前面。</p>
+      <p>他看了一眼身后的七人。第一次,他觉得自己不是一个人。</p>
+      <p><strong>"前线,永不后退。"</strong></p>
+      <div class="code">// CHAPTER 01 — TO BE CONTINUED // CHAPTER 02 — "CLEANERS" — LOADING...</div>
+    </div>
+  </section>
+
+  <!-- CHARACTER SECTIONS (generated by JS) -->
+  <div id="char-sections"></div>
+
+  <!-- SECTION CLOSING -->
+  <section class="section closing">
+    <h2>TO BE CONTINUED</h2>
+    <p>// CHAPTER 01 — END OF TRANSMISSION</p>
+    <p style="color:var(--muted); font-size:10px; margin-top:20px;">— NEONFALL // 未来都市冒险故事 —</p>
+  </section>
+
+  <script src="_data.js"></script>
+  <script>
+    // ============================================================
+    // HERO LOGO — letter-by-letter build
+    // ============================================================
+    const HERO = 'NEONFALL';
+    const heroLogoEl = document.getElementById('hero-logo');
+    HERO.split('').forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'ch';
+      span.textContent = ch;
+      span.style.animationDelay = (0.3 + i * 0.15) + 's';
+      heroLogoEl.appendChild(span);
+    });
+
+    // ============================================================
+    // PARTICLES — floating pixel dust
+    // ============================================================
+    const particlesEl = document.getElementById('particles');
+    const PIXEL_CHARS = ['◆', '◈', '◇', '○', '◌', '◊', '★', '✦', '0', '1', 'ア', '日'];
+    for (let i = 0; i < 30; i++) {
+      const s = document.createElement('span');
+      s.textContent = PIXEL_CHARS[Math.floor(Math.random() * PIXEL_CHARS.length)];
+      s.style.left = Math.random() * 100 + '%';
+      s.style.bottom = '-20px';
+      s.style.fontSize = (8 + Math.random() * 12) + 'px';
+      s.style.color = Math.random() > 0.5 ? 'var(--phosphor-2)' : 'var(--hot-pink)';
+      s.style.animationDuration = (8 + Math.random() * 12) + 's';
+      s.style.animationDelay = (Math.random() * 8) + 's';
+      s.style.opacity = 0.3 + Math.random() * 0.5;
+      particlesEl.appendChild(s);
+    }
+
+    // ============================================================
+    // BUILD CHARACTER SECTIONS
+    // ============================================================
+    const sectionsEl = document.getElementById('char-sections');
+    CHARACTERS.forEach((c, i) => {
+      const sec = document.createElement('section');
+      sec.className = 'section char reveal';
+      sec.id = 'char-' + i;
+      sec.dataset.idx = i;
+      sec.style.setProperty('--accent', c.color);
+      sec.innerHTML = `
+        <div class="char-sprite">
+          <div class="frame flip3d spin-front" id="frame-${i}">
+            <div class="cube">
+              <div class="cube-face front">${c.klingAnim ? '<img src="' + c.id + '/front_anim.gif" class="char-apng" alt="' + c.name + '">' : (c.apng ? '<img src="' + c.id + '/front.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/front.png)"></div>')}</div>
+              <div class="cube-face right">${c.apng && !c.klingAnim ? '<img src="' + c.id + '/right.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/right.png)"></div>'}</div>
+              <div class="cube-face back">${c.apng && !c.klingAnim ? '<img src="' + c.id + '/back.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/back.png)"></div>'}</div>
+              <div class="cube-face left">${c.apng && !c.klingAnim ? '<img src="' + c.id + '/left.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/left.png)"></div>'}</div>
+            </div>
+            <div class="progress"><div class="progress-fill" id="prog-${i}"></div></div>
+          </div>
+          <div class="view-chips" data-char="${i}">
+            <span class="chip active" data-view="front">前</span>
+            <span class="chip" data-view="back">后</span>
+            <span class="chip" data-view="left">左</span>
+            <span class="chip" data-view="right">右</span>
+          </div>
+        </div>
+        <div class="char-info">
+          <div class="idx">// VANGUARD <strong>${String(i + 1).padStart(3, '0')}</strong> / 008</div>
+          <h1>${c.name}</h1>
+          <div class="nick">「${c.nick}」</div>
+          <div class="class-line">${c.className} <span class="role">— ${c.role}</span></div>
+          <div class="quote">"${c.quote}"</div>
+          <div class="bg">${c.bg}</div>
+          <div class="stat-block">
+            ${Object.entries(c.stats).map(([k, v]) => `
+              <div class="stat-row">
+                <span class="label">${k}</span>
+                <span class="bar"><span class="bar-fill" style="width:${v}%"></span></span>
+                <span class="val">${String(v).padStart(2, '0')}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="skill-block">
+            <div class="title">// SKILLS 技能</div>
+            <ul>${c.skills.map(s => `<li>${s}</li>`).join('')}</ul>
+          </div>
+          <div class="weapon-block">
+            <div class="title">// WEAPONS 武器</div>
+            <ul>${c.weapons.map(w => `<li>${w}</li>`).join('')}</ul>
+          </div>
+        </div>
+      `;
+      sectionsEl.appendChild(sec);
+    });
+
+    // ============================================================
+    // BUILD NAV DOTS
+    // ============================================================
+    const navDotsEl = document.getElementById('nav-dots');
+    // 000 = hero
+    const a0 = document.createElement('a');
+    a0.href = '#hero';
+    a0.textContent = '000';
+    a0.dataset.target = 'hero';
+    navDotsEl.appendChild(a0);
+    // S01-S04 = prologue story sections
+    for (let i = 1; i <= 4; i++) {
+      const a = document.createElement('a');
+      a.href = '#story-' + i;
+      a.textContent = 'S0' + i;
+      a.dataset.target = 'story-' + i;
+      navDotsEl.appendChild(a);
+    }
+    // C1-01..C1-03 = chapter 1 sections
+    for (let i = 1; i <= 3; i++) {
+      const a = document.createElement('a');
+      a.href = '#ch1-0' + i;
+      a.textContent = 'C1-' + String(i).padStart(2, '0');
+      a.dataset.target = 'ch1-0' + i;
+      navDotsEl.appendChild(a);
+    }
+    // 001-008 = characters
+    CHARACTERS.forEach((c, i) => {
+      const a = document.createElement('a');
+      a.href = '#char-' + i;
+      a.textContent = String(i + 1).padStart(3, '0');
+      a.dataset.target = 'char-' + i;
+      navDotsEl.appendChild(a);
+    });
+
+    // ============================================================
+    // PER-CHARACTER AUTO-CYCLE + view chip click
+    // ============================================================
+    const VIEWS = ['front', 'back', 'left', 'right'];
+    const CYCLE_MS = 2500;
+    const charState = CHARACTERS.map((c, i) => ({
+      viewIdx: 0,
+      lastTick: Date.now(),
+      pausedUntil: 0,
+      timer: null,
+    }));
+
+    function setView(i, viewIdx) {
+      const c = CHARACTERS[i];
+      const frame = document.getElementById('frame-' + i);
+
+      // 3D card-flip transition: spin the cube to the requested face
+      frame.classList.remove('spin-front', 'spin-right', 'spin-back', 'spin-left');
+      // small order: front, right, back, left (clockwise from front)
+      const spinClass = ['spin-front', 'spin-right', 'spin-back', 'spin-left'][viewIdx % 4];
+      frame.classList.add(spinClass);
+
+      // Update chip
+      const chips = document.querySelectorAll(`.view-chips[data-char="${i}"] .chip`);
+      chips.forEach((ch, k) => ch.classList.toggle('active', k === viewIdx % 4));
+      charState[i].viewIdx = viewIdx;
+      charState[i].lastTick = Date.now();
+    }
+
+    function updateProgress(i) {
+      const bar = document.getElementById('prog-' + i);
+      if (!bar) return;
+      const elapsed = (Date.now() - charState[i].lastTick) % CYCLE_MS;
+      bar.style.width = (elapsed / CYCLE_MS * 100) + '%';
+    }
+
+    CHARACTERS.forEach((c, i) => {
+      // Chip click → switch view
+      document.querySelectorAll(`.view-chips[data-char="${i}"] .chip`).forEach((chip, k) => {
+        chip.addEventListener('click', () => setView(i, k));
+      });
+    });
+    setInterval(() => CHARACTERS.forEach((_, i) => updateProgress(i)), 50);
+
+    // ============================================================
+    // SCROLL REVEAL + ACTIVE NAV DOT
+    // ============================================================
+    const sections = document.querySelectorAll('section.section');
+    const navLinks = document.querySelectorAll('.nav-dots a');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.remove('pre');
+          e.target.classList.add('in');
+          // Update nav active
+          const id = e.target.id;
+          navLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -10% 0px' });
+    sections.forEach(s => io.observe(s));
+  </script>
+</body>
+</html>
