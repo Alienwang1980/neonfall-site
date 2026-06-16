@@ -832,7 +832,7 @@
     </div>
     <div class="story-image" id="story-img-1">
       <span class="badge">// EST. 2087</span>
-      <img src="story/01_neoncity.gif" alt="Neoncity 2087 skyline">
+      <video autoplay loop muted playsinline><source src="story/01_neoncity_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"九亿人。十二万座摩天楼。一颗心脏。"</p>
@@ -851,7 +851,7 @@
     </div>
     <div class="story-image" id="story-img-2">
       <span class="badge">// 03:17:00 AM</span>
-      <img src="story/02_genesis.gif" alt="Genesis Core awakens">
+      <video autoplay loop muted playsinline><source src="story/02_genesis_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"一百年的等待。它睁开了眼睛。"</p>
@@ -876,7 +876,7 @@
     </div>
     <div class="story-image" id="story-img-3">
       <span class="badge">// ORIGIN UNKNOWN</span>
-      <img src="story/03_silhouettes.gif" alt="The signal carrier — the one who sent the call">
+      <video autoplay loop muted playsinline><source src="story/03_silhouettes_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"在那条加密消息背后,有一个发送者。"</p>
@@ -905,7 +905,7 @@
     </div>
     <div class="story-image" id="story-img-4">
       <span class="badge">// 23:47 PM</span>
-      <img src="story/04_nightclub.gif" alt="The last nightclub still dark — Vesper Quill at the door">
+      <video autoplay loop muted playsinline><source src="story/04_nightclub_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"我们不是英雄。我们只是杂音。"</p>
@@ -929,7 +929,7 @@
     </div>
     <div class="story-image" id="ch1-img-1">
       <span class="badge">// 00:00 AM</span>
-      <img src="chapter1/01_safehouse.gif" alt="01_safehouse">
+      <video autoplay loop muted playsinline><source src="chapter1/01_safehouse_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"门背后不是夜总会。是地下室。"</p>
@@ -951,7 +951,7 @@
     </div>
     <div class="story-image" id="ch1-img-2">
       <span class="badge">// 02:00 AM</span>
-      <img src="chapter1/02_vega_lonely.gif" alt="02_vega_lonely">
+      <video autoplay loop muted playsinline><source src="chapter1/02_vega_lonely_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"他的故乡,在凌晨两点消失在了火海里。"</p>
@@ -974,7 +974,7 @@
     </div>
     <div class="story-image" id="ch1-img-3">
       <span class="badge">// 03:17:00 AM</span>
-      <img src="chapter1/03_cleaners.gif" alt="03_cleaners">
+      <video autoplay loop muted playsinline><source src="chapter1/03_cleaners_video.mp4" type="video/mp4"></video>
     </div>
     <div class="story-narration">
       <p class="lead">"凌晨 3:17。AI 觉醒了 24 小时整。它派了'清洁工'来。"</p>
@@ -1053,7 +1053,7 @@
         <div class="char-sprite">
           <div class="frame flip3d spin-front" id="frame-${i}">
             <div class="cube">
-              <div class="cube-face front">${c.klingAnim ? '<img src="' + c.id + '/front_anim.gif" class="char-apng" alt="' + c.name + '">' : (c.apng ? '<img src="' + c.id + '/front.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/front.png)"></div>')}</div>
+              <div class="cube-face front">${c.klingAnim ? '<video autoplay loop muted playsinline class="char-apng"><source src="' + c.id + '/front_video.mp4" type="video/mp4"></video>' : (c.apng ? '<img src="' + c.id + '/front.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/front.png)"></div>')}</div>
               <div class="cube-face right">${c.apng && !c.klingAnim ? '<img src="' + c.id + '/right.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/right.png)"></div>'}</div>
               <div class="cube-face back">${c.apng && !c.klingAnim ? '<img src="' + c.id + '/back.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/back.png)"></div>'}</div>
               <div class="cube-face left">${c.apng && !c.klingAnim ? '<img src="' + c.id + '/left.apng" class="char-apng" alt="' + c.name + '">' : '<div class="sprite-layer" style="background-image:url(' + c.id + '/left.png)"></div>'}</div>

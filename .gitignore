@@ -19,3 +19,8 @@ side_*.gif
 !**/right.png
 !**/back.png
 !**/left.png
+kling_originals/
+test_*.mp4
+street_kid/anim_keyframe_test*
+street_kid/method*.gif
+web_videos/
