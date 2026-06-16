@@ -808,178 +808,291 @@
   }
 
   /* ============================================================
-     RESPONSIVE: MOBILE-FIRST REDESIGN
-     Completely re-layouts for phone screens.
+     RESPONSIVE: COMPREHENSIVE MOBILE REDESIGN
+     Fixes: text wrapping, spacing, overflow, absolute positions,
+     pixel font sizing, stat grids, view chips, nav, everything.
      ============================================================ */
 
-  /* Tablet: 769-1024px — minor adjustments */
+  /* Tablet (769-1024px) */
   @media (max-width: 1024px) and (min-width: 769px) {
     .section.char { padding: 60px 32px; gap: 32px; }
     .section.story { padding: 60px 32px; }
-    .char-info h1 { font-size: 28px; }
+    .char-info h1 { font-size: 24px; }
     .story-image { width: min(700px, 90%); }
   }
 
-  /* MOBILE: ≤768px — complete re-layout */
+  /* MOBILE (≤768px) — complete redesign */
   @media (max-width: 768px) {
-    /* ── Global section reset ── */
+    /* ── Global: prevent all overflow ── */
     .section {
-      padding: 48px 20px !important;
+      padding: 40px 16px 48px !important;
       min-height: auto !important;
     }
     .section.hero {
-      padding: 40px 16px 60px !important;
-      min-height: 100vh !important;
+      padding: 32px 12px 48px !important;
+      min-height: 100dvh !important;
+      gap: 16px;
     }
+    body { overflow-x: hidden; }
 
-    /* ── Sticky nav ── */
+    /* ── Sticky nav: scrollable + compact ── */
     .sticky-nav {
-      padding: 6px 8px !important;
-      gap: 4px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      padding: 4px 6px !important;
     }
     .sticky-nav .brand { display: none !important; }
-    .sticky-nav .nav-dots { gap: 2px; }
+    .sticky-nav .nav-dots {
+      gap: 1px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 2px 0;
+    }
     .sticky-nav .nav-dots a {
       flex-shrink: 0;
-      width: 20px; height: 20px;
-      font-size: 6px;
-      padding: 2px 3px;
+      width: 18px; height: 18px;
+      font-size: 5px;
+      padding: 1px 2px;
+      line-height: 14px;
+      text-align: center;
     }
 
     /* ── Hero ── */
-    .hero-logo { font-size: clamp(24px, 14vw, 56px) !important; letter-spacing: 4px; }
-    .hero-sub { font-size: 8px !important; }
-    .hero-start { font-size: 9px; bottom: 16px; }
-    .particles { display: none; } /* hide particles on mobile for performance */
+    .hero-logo {
+      font-size: clamp(20px, 10vw, 42px) !important;
+      letter-spacing: 2px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .hero-logo::before, .hero-logo::after { font-size: inherit; }
+    .hero-sub {
+      font-size: 7px !important;
+      letter-spacing: 3px;
+    }
+    .hero-tag { font-size: 6px; letter-spacing: 2px; }
+    .particles { display: none !important; }
+    .scroll-hint { bottom: 16px; font-size: 7px; }
+    .scroll-hint::after { height: 20px; margin-top: 8px; }
 
     /* ── Story sections ── */
-    .section.story { padding: 40px 16px 48px !important; }
-    .story-head { margin-bottom: 8px; }
-    .story-head .chapter { font-size: 6px; letter-spacing: 2px; }
-    .story-head h2 { font-size: 16px !important; }
-    .story-head .sub { font-size: 8px; }
+    .section.story {
+      padding: 32px 12px 40px !important;
+      gap: 16px;
+    }
+    .story-head {
+      max-width: 100%;
+      margin-bottom: 0;
+    }
+    .story-head .chapter {
+      font-size: 5px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    .story-head .chapter strong { font-size: 7px; }
+    .story-head h2 {
+      font-size: 13px !important;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .story-head .sub {
+      font-size: 7px;
+      letter-spacing: 2px;
+    }
     .story-image {
       width: 100% !important;
-      max-width: 400px;
+      max-width: 360px;
       margin: 0 auto;
     }
     .story-image::before, .story-image::after {
-      width: 16px; height: 16px;
+      width: 14px; height: 14px;
       border-width: 2px;
     }
-    .story-image::before { top: 5px; left: 5px; }
-    .story-image::after { bottom: 5px; right: 5px; }
-    .story-image .badge { top: 8px; right: 8px; font-size: 6px; padding: 2px 6px; }
+    .story-image::before { top: 4px; left: 4px; }
+    .story-image::after  { bottom: 4px; right: 4px; }
+    .story-image .badge {
+      top: 6px; right: 6px;
+      font-size: 5px;
+      padding: 2px 4px;
+    }
     .story-narration {
       max-width: 100% !important;
-      padding: 0 !important;
+      padding: 0 2px !important;
     }
     .story-narration p {
-      font-size: 13px !important;
-      line-height: 1.6;
+      font-size: 11px !important;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
-    .story-narration p.lead { font-size: 14px !important; }
-    .story-narration .code { font-size: 10px; padding: 6px 10px; }
+    .story-narration p.lead {
+      font-size: 12px !important;
+      padding: 6px 0 6px 10px;
+    }
+    .story-narration p strong {
+      font-size: 8px !important;
+      letter-spacing: 0;
+    }
+    .story-narration .code {
+      font-size: 7px;
+      padding: 6px 8px;
+      margin: 8px 0;
+      word-break: break-all;
+    }
 
     /* ── Character sections ── */
     .section.char {
       flex-direction: column !important;
-      padding: 32px 16px !important;
-      gap: 16px;
+      padding: 24px 12px 32px !important;
+      gap: 10px;
     }
     .section.char:nth-child(even) { flex-direction: column !important; }
 
-    /* Sprite cube */
+    /* Sprite frame */
     .char-sprite {
       flex: none !important;
       width: 100%;
       min-height: auto !important;
     }
     .char-sprite .frame {
-      width: min(280px, 80%) !important;
+      width: min(260px, 75%) !important;
       margin: 0 auto;
-    }
-    .char-sprite .frame.flip3d { perspective: 700px !important; }
-    .char-sprite .frame::before, .char-sprite .frame::after {
-      width: 16px; height: 16px;
       border-width: 2px;
     }
-    .char-sprite .frame::before { top: 4px; left: 4px; }
-    .char-sprite .frame::after  { bottom: 4px; right: 4px; }
+    .char-sprite .frame.flip3d { perspective: 600px !important; }
+    .char-sprite .frame::before, .char-sprite .frame::after {
+      width: 12px; height: 12px;
+      border-width: 2px;
+    }
+    .char-sprite .frame::before { top: 3px; left: 3px; }
+    .char-sprite .frame::after  { bottom: 3px; right: 3px; }
 
-    /* Video fills cube */
-    .char-apng, .char-sprite img {
+    /* Video in frame */
+    .char-apng, .char-sprite img, .char-sprite .cube-face video {
       width: 100% !important;
       height: 100% !important;
       object-fit: contain;
     }
+    .char-sprite .cube-face video {
+      position: absolute;
+      inset: 0;
+      image-rendering: pixelated;
+    }
 
-    /* View chips */
-    .view-chips { gap: 4px; margin-top: 4px; }
+    /* Progress bar */
+    .char-sprite .progress {
+      left: 4px; right: 4px;
+      bottom: 4px;
+      height: 3px;
+    }
+
+    /* View chips — repositioned inside frame bottom instead of absolute outside */
+    .view-chips {
+      position: static !important;
+      transform: none !important;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
     .view-chips .chip {
-      padding: 3px 8px;
-      font-size: 7px;
+      padding: 2px 6px;
+      font-size: 6px;
       border-width: 1px;
     }
 
-    /* Character info */
+    /* ── Character info: all centered, no overflow ── */
     .char-info {
       max-width: 100% !important;
       align-items: center;
       text-align: center;
-      gap: 6px;
+      gap: 4px;
     }
-    .char-info .idx { font-size: 7px; letter-spacing: 2px; }
-    .char-info .idx strong { font-size: 10px; }
-    .char-info h1 { font-size: 20px !important; letter-spacing: 1px; }
-    .char-info .nick { font-size: 9px; }
-    .char-info .class-line { font-size: 11px; }
+    .char-info .idx {
+      font-size: 6px;
+      letter-spacing: 1px;
+    }
+    .char-info .idx strong { font-size: 8px; }
+    .char-info h1 {
+      font-size: 16px !important;
+      letter-spacing: 1px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .char-info .nick { font-size: 8px; }
+    .char-info .class-line { font-size: 9px; letter-spacing: 1px; }
+    .char-info .class-line .role { margin-left: 4px; }
     .char-info .quote {
-      font-size: 11px !important;
-      padding: 6px 12px !important;
-      margin: 4px 0;
+      font-size: 10px !important;
+      padding: 4px 8px !important;
+      border-left-width: 2px;
+      margin: 2px 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      max-width: 320px;
     }
     .char-info .bg {
-      font-size: 12px !important;
-      line-height: 1.6;
-      max-width: 360px;
+      font-size: 10px !important;
+      line-height: 1.5;
+      padding: 6px 8px;
+      max-width: 340px;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
-    /* Stats */
-    .stat-block { max-width: 280px; margin: 0 auto; gap: 4px; }
-    .stat-row { font-size: 7px; grid-template-columns: 32px 1fr 24px; gap: 4px; }
+    /* Stats: simplified grid for mobile */
+    .stat-block {
+      max-width: 260px;
+      margin: 0 auto;
+      gap: 3px;
+    }
+    .stat-row {
+      grid-template-columns: 30px 1fr 22px;
+      gap: 4px;
+      font-size: 6px;
+    }
+    .stat-row .bar { height: 6px; }
 
-    /* ── Skills & Weapons ── */
-    .char-info h3 { font-size: 8px; letter-spacing: 1px; margin-top: 4px; }
-    .char-info ul { gap: 2px; }
-    .char-info li { font-size: 10px; padding: 1px 6px; }
+    /* Skills & Weapons */
+    .skill-block, .weapon-block { gap: 3px; margin-top: 4px; }
+    .skill-block .title, .weapon-block .title { font-size: 7px; }
+    .skill-block ul, .weapon-block ul { gap: 3px; justify-content: center; }
+    .skill-block li, .weapon-block li {
+      font-size: 6px;
+      padding: 2px 5px;
+    }
 
-    /* ── Closing section ── */
-    .section.closing { padding: 40px 20px 60px !important; }
-    .closing h2 { font-size: 18px; }
-    .closing p { font-size: 13px; }
+    /* ── Closing ── */
+    .section.closing { padding: 32px 16px 48px !important; gap: 16px; }
+    .closing h2 {
+      font-size: 24px !important;
+      letter-spacing: 4px;
+    }
+    .closing p {
+      font-size: 8px;
+      letter-spacing: 2px;
+    }
   }
 
-  /* TINY PHONE: ≤380px — tighter still */
+  /* EXTRA SMALL (≤380px) */
   @media (max-width: 380px) {
-    .section { padding: 32px 12px !important; }
-    .section.hero { padding: 32px 12px 48px !important; }
-    .char-sprite .frame { width: min(220px, 90%) !important; }
-    .char-sprite .frame.flip3d { perspective: 500px !important; }
-    .char-info h1 { font-size: 17px !important; }
-    .story-image { max-width: 100%; }
-    .sticky-nav .nav-dots a { width: 18px; height: 18px; font-size: 5px; }
+    .section { padding: 28px 10px 36px !important; }
+    .section.hero { padding: 24px 8px 36px !important; }
+    .section.char { padding: 20px 8px 24px !important; }
+    .char-sprite .frame { width: min(200px, 85%) !important; }
+    .char-sprite .frame.flip3d { perspective: 450px !important; }
+    .char-info h1 { font-size: 14px !important; }
+    .char-info .quote { font-size: 9px !important; }
+    .story-head h2 { font-size: 11px !important; }
+    .story-narration p { font-size: 10px !important; }
+    .closing h2 { font-size: 18px !important; }
+    .sticky-nav .nav-dots a { width: 16px; height: 16px; font-size: 4px; }
   }
 
-  /* Touch devices: remove hover, use active */
+  /* TOUCH: no hover, use active */
   @media (hover: none) and (pointer: coarse) {
     .sticky-nav .nav-dots a:hover,
-    .view-chips .chip:hover {
-      background: transparent !important;
-    }
+    .view-chips .chip:hover { background: transparent !important; }
     .sticky-nav .nav-dots a:active { background: var(--accent, var(--phosphor)); }
     .view-chips .chip:active { background: var(--accent, var(--phosphor-2)); color: var(--void); }
   }
