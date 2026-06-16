@@ -359,6 +359,7 @@
     height: 100%;
     object-fit: contain;
     image-rendering: pixelated;
+    animation: float-sprite 4s ease-in-out infinite;
   }
   .char-sprite .sprite-layer:not(.flicker) {
     background-size: contain;
@@ -693,7 +694,8 @@
       inset 0 0 60px rgba(0,0,0,0.5);
     overflow: hidden;
   }
-  .story-image img {
+  .story-image img,
+  .story-image video {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -803,6 +805,166 @@
   @keyframes shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
+  }
+
+  /* ============================================================
+     RESPONSIVE: MOBILE & TABLET
+     NEONFALL adapts from desktop down.
+     ============================================================ */
+
+  /* Tablet: ≤1024px */
+  @media (max-width: 1024px) {
+    .section.char { padding: 80px 40px; gap: 40px; }
+    .char-info h1 { font-size: 28px; }
+    .story-narration p { font-size: 14px; }
+  }
+
+  /* Large phone: ≤768px — layout stacks vertically */
+  @media (max-width: 768px) {
+    /* Sections: vertical stack */
+    .section.char {
+      flex-direction: column !important;
+      padding: 60px 24px;
+      gap: 24px;
+      min-height: auto;
+    }
+    .section.char:nth-child(even) { flex-direction: column !important; }
+
+    /* Sprite cube smaller */
+    .char-sprite {
+      flex: none;
+      width: 100%;
+      min-height: auto;
+    }
+    .char-sprite .frame {
+      width: min(340px, 85%);
+    }
+    .char-sprite .frame.flip3d {
+      perspective: 800px;
+    }
+    .char-sprite .frame::before,
+    .char-sprite .frame::after {
+      width: 20px; height: 20px;
+    }
+    .char-sprite .frame::before { top: 5px; left: 5px; }
+    .char-sprite .frame::after  { bottom: 5px; right: 5px; }
+
+    /* Character info */
+    .char-info {
+      max-width: 100%;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+    .char-info h1 { font-size: 24px; }
+    .char-info .nick { font-size: 10px; }
+    .char-info .class-line { font-size: 12px; }
+    .char-info .quote { font-size: 13px; padding: 10px 16px; }
+    .char-info .bg { font-size: 13px; line-height: 1.6; }
+
+    .stat-block { max-width: 320px; margin: 0 auto; }
+
+    /* View chips */
+    .view-chips { gap: 6px; }
+    .view-chips .chip {
+      padding: 4px 10px;
+      font-size: 8px;
+    }
+
+    /* Hero */
+    .section.hero {
+      padding: 40px 20px;
+    }
+    .hero-logo { font-size: clamp(32px, 12vw, 72px); }
+    .hero-sub { font-size: 10px; }
+
+    /* Story sections */
+    .section.story {
+      flex-direction: column;
+      padding: 40px 20px;
+      min-height: auto;
+    }
+    .story-head { margin-bottom: 10px; }
+    .story-head h2 { font-size: 18px; }
+    .story-head .chapter { font-size: 7px; }
+    .story-head .sub { font-size: 9px; }
+    .story-image { width: min(500px, 95%); }
+    .story-narration { max-width: 100%; padding: 0 4px; }
+    .story-narration p { font-size: 13px; line-height: 1.7; }
+
+    /* Chapter closing */
+    .section.closing { padding: 60px 20px; }
+    .closing h2 { font-size: 20px; }
+  }
+
+  /* Small phone: ≤480px */
+  @media (max-width: 480px) {
+    /* Navigation: compact */
+    .sticky-nav {
+      padding: 6px 10px;
+      gap: 4px;
+    }
+    .sticky-nav .brand { display: none; } /* hide brand text, keep dots */
+    .sticky-nav .nav-dots a {
+      width: 22px; height: 22px;
+      font-size: 7px;
+    }
+
+    /* Sprite */
+    .char-sprite .frame {
+      width: min(260px, 92%);
+    }
+    .char-sprite .frame.flip3d {
+      perspective: 600px;
+    }
+    .char-sprite .frame::before,
+    .char-sprite .frame::after {
+      width: 14px; height: 14px;
+      border-width: 2px;
+    }
+    .char-sprite .frame::before { top: 4px; left: 4px; }
+    .char-sprite .frame::after  { bottom: 4px; right: 4px; }
+
+    /* Info */
+    .char-info h1 { font-size: 20px; }
+    .char-info .idx { font-size: 8px; }
+    .char-info .idx strong { font-size: 11px; }
+    .char-info .class-line { font-size: 10px; }
+    .char-info .quote { font-size: 11px; padding: 8px 12px; }
+    .char-info .bg { font-size: 12px; }
+    .char-info { gap: 8px; }
+
+    .stat-row { font-size: 7px; grid-template-columns: 36px 1fr 28px; gap: 6px; }
+
+    /* Hero */
+    .hero-logo { font-size: clamp(24px, 10vw, 48px); }
+    .hero-sub { font-size: 8px; }
+    .hero-start { font-size: 10px; bottom: 20px; }
+
+    /* Stories */
+    .story-head h2 { font-size: 15px; }
+    .story-image { width: 100%; }
+    .story-image::before,
+    .story-image::after {
+      width: 18px; height: 18px;
+      border-width: 2px;
+    }
+    .story-image::before { top: 6px; left: 6px; }
+    .story-image::after  { bottom: 6px; right: 6px; }
+    .story-narration p { font-size: 12px; }
+    .story-narration .code { font-size: 10px; padding: 8px; }
+
+    /* Chapter */
+    .section.closing { padding: 40px 16px; }
+    .closing h2 { font-size: 16px; }
+    .closing p { font-size: 12px; }
+  }
+
+  /* Touch-friendly: hide hover effects on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .sticky-nav .nav-dots a:hover { background: transparent; }
+    .view-chips .chip:hover { background: transparent; }
+    .sticky-nav .nav-dots a:active { background: var(--accent, var(--phosphor)); }
   }
 </style>
 </head>
