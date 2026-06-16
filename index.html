@@ -808,164 +808,159 @@
   }
 
   /* ============================================================
-     RESPONSIVE: COMPREHENSIVE MOBILE REDESIGN
-     Fixes: text wrapping, spacing, overflow, absolute positions,
-     pixel font sizing, stat grids, view chips, nav, everything.
+     MOBILE: complete card-based redesign (≤768px)
+     Design pattern: game character profile / mobile portfolio
+     Cards with staggered layout, collapsible sections, touch targets
      ============================================================ */
 
-  /* Tablet (769-1024px) */
-  @media (max-width: 1024px) and (min-width: 769px) {
-    .section.char { padding: 60px 32px; gap: 32px; }
-    .section.story { padding: 60px 32px; }
-    .char-info h1 { font-size: 24px; }
-    .story-image { width: min(700px, 90%); }
-  }
-
-  /* MOBILE (≤768px) — complete redesign */
   @media (max-width: 768px) {
-    /* ── Global: prevent all overflow ── */
-    .section {
-      padding: 40px 16px 48px !important;
-      min-height: auto !important;
-    }
-    .section.hero {
-      padding: 32px 12px 48px !important;
-      min-height: 100dvh !important;
-      gap: 16px;
-    }
-    body { overflow-x: hidden; }
+    /* ── Viewport fix (set by JS) ── */
+    .section.hero { min-height: calc(var(--vh, 1vh) * 100) !important; }
 
-    /* ── Sticky nav: scrollable + compact ── */
+    /* ── Sticky nav: compact scrollable rail ── */
     .sticky-nav {
-      padding: 4px 6px !important;
+      padding: 4px 8px !important;
     }
     .sticky-nav .brand { display: none !important; }
     .sticky-nav .nav-dots {
-      gap: 1px;
+      gap: 0;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       padding: 2px 0;
+      scrollbar-width: none;
     }
+    .sticky-nav .nav-dots::-webkit-scrollbar { display: none; }
     .sticky-nav .nav-dots a {
       flex-shrink: 0;
-      width: 18px; height: 18px;
+      width: 20px; height: 20px;
       font-size: 5px;
-      padding: 1px 2px;
-      line-height: 14px;
+      padding: 0;
+      line-height: 18px;
       text-align: center;
+      border-radius: 0;
+      border: none;
     }
 
-    /* ── Hero ── */
+    /* ── Body overflow ── */
+    body { overflow-x: hidden; }
+
+    /* ── Section base: card-style spacing ── */
+    .section {
+      padding: 32px 16px 40px !important;
+      min-height: auto !important;
+    }
+
+    /* ── HERO ── */
+    .section.hero {
+      padding: 48px 16px 40px !important;
+      gap: 12px;
+    }
     .hero-logo {
-      font-size: clamp(20px, 10vw, 42px) !important;
-      letter-spacing: 2px;
-      overflow-wrap: break-word;
-      word-break: break-word;
+      font-size: clamp(24px, 12vw, 48px) !important;
+      letter-spacing: 4px;
     }
-    .hero-logo::before, .hero-logo::after { font-size: inherit; }
+    .hero-logo::before, .hero-logo::after {
+      font-size: clamp(24px, 12vw, 48px);
+    }
     .hero-sub {
-      font-size: 7px !important;
-      letter-spacing: 3px;
+      font-size: 8px !important;
+      letter-spacing: 4px;
+      margin-top: 8px;
     }
-    .hero-tag { font-size: 6px; letter-spacing: 2px; }
-    .particles { display: none !important; }
-    .scroll-hint { bottom: 16px; font-size: 7px; }
+    .hero-tag { font-size: 7px; letter-spacing: 3px; }
+    .particles { display: block !important; } /* keep particles */
+    .scroll-hint { bottom: 20px; font-size: 7px; }
     .scroll-hint::after { height: 20px; margin-top: 8px; }
 
-    /* ── Story sections ── */
+    /* ── STORY SECTIONS: video card + text card ── */
     .section.story {
-      padding: 32px 12px 40px !important;
-      gap: 16px;
+      padding: 28px 14px 36px !important;
+      gap: 14px;
     }
     .story-head {
       max-width: 100%;
       margin-bottom: 0;
     }
     .story-head .chapter {
-      font-size: 5px;
+      font-size: 6px;
       letter-spacing: 2px;
       margin-bottom: 6px;
     }
-    .story-head .chapter strong { font-size: 7px; }
+    .story-head .chapter strong { font-size: 8px; }
     .story-head h2 {
-      font-size: 13px !important;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .story-head .sub {
-      font-size: 7px;
+      font-size: 15px !important;
       letter-spacing: 2px;
+      margin-bottom: 4px;
     }
+    .story-head .sub { font-size: 8px; letter-spacing: 2px; }
     .story-image {
       width: 100% !important;
-      max-width: 360px;
+      max-width: 380px;
       margin: 0 auto;
+      border-radius: 8px;
+      border-width: 1px;
     }
-    .story-image::before, .story-image::after {
-      width: 14px; height: 14px;
-      border-width: 2px;
-    }
-    .story-image::before { top: 4px; left: 4px; }
-    .story-image::after  { bottom: 4px; right: 4px; }
+    .story-image::before, .story-image::after { display: none; } /* corner accents clutter mobile */
     .story-image .badge {
       top: 6px; right: 6px;
-      font-size: 5px;
-      padding: 2px 4px;
+      font-size: 6px;
+      padding: 2px 6px;
+      border-radius: 3px;
     }
     .story-narration {
       max-width: 100% !important;
-      padding: 0 2px !important;
+      padding: 0 !important;
     }
     .story-narration p {
-      font-size: 11px !important;
-      line-height: 1.5;
-      margin-bottom: 10px;
-      overflow-wrap: break-word;
-      word-break: break-word;
+      font-size: 13px !important;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
     .story-narration p.lead {
-      font-size: 12px !important;
-      padding: 6px 0 6px 10px;
+      font-size: 14px !important;
+      padding: 8px 0 8px 12px;
+      margin-bottom: 14px;
     }
     .story-narration p strong {
-      font-size: 8px !important;
+      font-size: 10px !important;
       letter-spacing: 0;
     }
     .story-narration .code {
-      font-size: 7px;
-      padding: 6px 8px;
-      margin: 8px 0;
-      word-break: break-all;
+      font-size: 8px;
+      padding: 10px 12px;
+      margin: 12px 0;
+      border-radius: 6px;
     }
 
-    /* ── Character sections ── */
+    /* ── CHARACTER SECTIONS: card layout ── */
     .section.char {
       flex-direction: column !important;
-      padding: 24px 12px 32px !important;
-      gap: 10px;
+      padding: 24px 14px 36px !important;
+      gap: 0 !important;
     }
     .section.char:nth-child(even) { flex-direction: column !important; }
 
-    /* Sprite frame */
+    /* Video cube card */
     .char-sprite {
       flex: none !important;
       width: 100%;
       min-height: auto !important;
+      margin-bottom: 12px;
     }
     .char-sprite .frame {
-      width: min(260px, 75%) !important;
+      width: min(280px, 80%) !important;
       margin: 0 auto;
       border-width: 2px;
+      border-radius: 8px;
     }
-    .char-sprite .frame.flip3d { perspective: 600px !important; }
-    .char-sprite .frame::before, .char-sprite .frame::after {
-      width: 12px; height: 12px;
+    .char-sprite .frame.flip3d { perspective: 700px !important; }
+    .char-sprite .frame::before,
+    .char-sprite .frame::after {
+      width: 14px; height: 14px;
       border-width: 2px;
     }
-    .char-sprite .frame::before { top: 3px; left: 3px; }
-    .char-sprite .frame::after  { bottom: 3px; right: 3px; }
+    .char-sprite .frame::before { top: 4px; left: 4px; }
+    .char-sprite .frame::after  { bottom: 4px; right: 4px; }
 
     /* Video in frame */
     .char-apng, .char-sprite img, .char-sprite .cube-face video {
@@ -974,8 +969,7 @@
       object-fit: contain;
     }
     .char-sprite .cube-face video {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       image-rendering: pixelated;
     }
 
@@ -984,117 +978,192 @@
       left: 4px; right: 4px;
       bottom: 4px;
       height: 3px;
+      border-radius: 2px;
     }
+    .char-sprite .progress-fill { border-radius: 2px; }
 
-    /* View chips — repositioned inside frame bottom instead of absolute outside */
+    /* View chips under cube */
     .view-chips {
       position: static !important;
       transform: none !important;
       display: flex;
       justify-content: center;
       gap: 4px;
-      margin-top: 4px;
+      margin-top: 8px;
     }
     .view-chips .chip {
-      padding: 2px 6px;
-      font-size: 6px;
+      padding: 4px 8px;
+      font-size: 7px;
       border-width: 1px;
+      border-radius: 4px;
+      min-width: 30px;
+      text-align: center;
     }
 
-    /* ── Character info: all centered, no overflow ── */
+    /* ── Character info: card-style stacked sections ── */
     .char-info {
       max-width: 100% !important;
-      align-items: center;
-      text-align: center;
-      gap: 4px;
+      align-items: stretch;
+      text-align: left;
+      gap: 8px;
+      width: 100%;
     }
+
+    /* Header row: name + number */
     .char-info .idx {
-      font-size: 6px;
-      letter-spacing: 1px;
-    }
-    .char-info .idx strong { font-size: 8px; }
-    .char-info h1 {
-      font-size: 16px !important;
-      letter-spacing: 1px;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .char-info .nick { font-size: 8px; }
-    .char-info .class-line { font-size: 9px; letter-spacing: 1px; }
-    .char-info .class-line .role { margin-left: 4px; }
-    .char-info .quote {
-      font-size: 10px !important;
-      padding: 4px 8px !important;
-      border-left-width: 2px;
-      margin: 2px 0;
-      overflow-wrap: break-word;
-      word-break: break-word;
-      max-width: 320px;
-    }
-    .char-info .bg {
-      font-size: 10px !important;
-      line-height: 1.5;
-      padding: 6px 8px;
-      max-width: 340px;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-
-    /* Stats: simplified grid for mobile */
-    .stat-block {
-      max-width: 260px;
-      margin: 0 auto;
-      gap: 3px;
-    }
-    .stat-row {
-      grid-template-columns: 30px 1fr 22px;
-      gap: 4px;
-      font-size: 6px;
-    }
-    .stat-row .bar { height: 6px; }
-
-    /* Skills & Weapons */
-    .skill-block, .weapon-block { gap: 3px; margin-top: 4px; }
-    .skill-block .title, .weapon-block .title { font-size: 7px; }
-    .skill-block ul, .weapon-block ul { gap: 3px; justify-content: center; }
-    .skill-block li, .weapon-block li {
-      font-size: 6px;
-      padding: 2px 5px;
-    }
-
-    /* ── Closing ── */
-    .section.closing { padding: 32px 16px 48px !important; gap: 16px; }
-    .closing h2 {
-      font-size: 24px !important;
-      letter-spacing: 4px;
-    }
-    .closing p {
       font-size: 8px;
       letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 2px;
     }
+    .char-info .idx strong { font-size: 10px; }
+
+    /* Name card */
+    .char-info > h1 {
+      font-size: 22px !important;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+    .char-info .nick {
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+    .char-info .class-line {
+      font-size: 10px;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .char-info .class-line .role { margin-left: 6px; }
+
+    /* Quote accent card */
+    .char-info .quote {
+      font-size: 12px !important;
+      padding: 8px 12px !important;
+      border-left-width: 3px;
+      border-radius: 0 6px 6px 0;
+      margin: 4px 0 8px !important;
+      background: rgba(255,179,0,0.05);
+      width: 100%;
+    }
+
+    /* Stats bars card */
+    .stat-block {
+      max-width: 100%;
+      margin: 0;
+      gap: 4px;
+      padding: 10px 12px;
+      background: var(--void-2);
+      border: 1px solid var(--dim);
+      border-radius: 8px;
+    }
+    .stat-row {
+      grid-template-columns: 34px 1fr 28px;
+      gap: 6px;
+      font-size: 7px;
+    }
+    .stat-row .bar { height: 8px; border-radius: 4px; }
+    .stat-row .bar-fill { border-radius: 4px; }
+
+    /* Background story: collapsible card */
+    .bg-wrap {
+      position: relative;
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--void-2);
+      border: 1px solid var(--dim);
+      border-radius: 8px;
+    }
+    .bg-wrap .bg {
+      font-size: 11px !important;
+      line-height: 1.6;
+      padding: 0;
+      max-height: 3.3em;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      border-left: none;
+      background: transparent;
+    }
+    .bg-wrap.expanded .bg {
+      max-height: 500px;
+    }
+    .bg-toggle {
+      display: block;
+      width: 100%;
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: var(--phosphor-2);
+      background: transparent;
+      border: none;
+      border-top: 1px solid var(--dim);
+      padding: 6px 0 2px;
+      margin-top: 6px;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .bg-toggle:active { color: var(--hot-pink); }
+
+    /* Skills & Weapons: chip cards */
+    .skill-block, .weapon-block {
+      width: 100%;
+      gap: 4px;
+      margin-top: 4px;
+      padding: 8px 12px;
+      background: var(--void-2);
+      border: 1px solid var(--dim);
+      border-radius: 8px;
+    }
+    .skill-block .title, .weapon-block .title {
+      font-size: 7px;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+    .skill-block ul, .weapon-block ul {
+      gap: 4px;
+      justify-content: flex-start;
+    }
+    .skill-block li, .weapon-block li {
+      font-size: 7px;
+      padding: 3px 7px;
+      border-radius: 4px;
+    }
+
+    /* ── CLOSING ── */
+    .section.closing {
+      padding: 40px 20px 60px !important;
+      gap: 20px;
+    }
+    .closing h2 {
+      font-size: 28px !important;
+      letter-spacing: 6px;
+    }
+    .closing p { font-size: 9px; letter-spacing: 3px; }
   }
 
-  /* EXTRA SMALL (≤380px) */
+  /* SMALL PHONE (≤380px) — tighter */
   @media (max-width: 380px) {
-    .section { padding: 28px 10px 36px !important; }
-    .section.hero { padding: 24px 8px 36px !important; }
-    .section.char { padding: 20px 8px 24px !important; }
-    .char-sprite .frame { width: min(200px, 85%) !important; }
-    .char-sprite .frame.flip3d { perspective: 450px !important; }
-    .char-info h1 { font-size: 14px !important; }
-    .char-info .quote { font-size: 9px !important; }
-    .story-head h2 { font-size: 11px !important; }
-    .story-narration p { font-size: 10px !important; }
-    .closing h2 { font-size: 18px !important; }
-    .sticky-nav .nav-dots a { width: 16px; height: 16px; font-size: 4px; }
+    .section { padding: 24px 12px 32px !important; }
+    .section.hero { padding: 36px 12px 32px !important; }
+    .section.char { padding: 20px 10px 28px !important; }
+    .char-sprite .frame { width: min(220px, 88%) !important; }
+    .char-sprite .frame.flip3d { perspective: 500px !important; }
+    .char-info > h1 { font-size: 18px !important; }
+    .char-info .quote { font-size: 11px !important; }
+    .story-head h2 { font-size: 13px !important; }
+    .story-narration p { font-size: 12px !important; }
+    .stat-row { grid-template-columns: 28px 1fr 24px; font-size: 6px; }
+    .closing h2 { font-size: 22px !important; }
   }
 
   /* TOUCH: no hover, use active */
   @media (hover: none) and (pointer: coarse) {
     .sticky-nav .nav-dots a:hover,
     .view-chips .chip:hover { background: transparent !important; }
-    .sticky-nav .nav-dots a:active { background: var(--accent, var(--phosphor)); }
-    .view-chips .chip:active { background: var(--accent, var(--phosphor-2)); color: var(--void); }
+    .sticky-nav .nav-dots a:active { background: var(--accent, var(--phosphor)) !important; }
+    .view-chips .chip:active {
+      background: var(--accent, var(--phosphor-2)) !important;
+      color: var(--void) !important;
+    }
   }
 </style>
 </head>
@@ -1365,7 +1434,10 @@
           <div class="nick">「${c.nick}」</div>
           <div class="class-line">${c.className} <span class="role">— ${c.role}</span></div>
           <div class="quote">"${c.quote}"</div>
-          <div class="bg">${c.bg}</div>
+          <div class="bg-wrap">
+            <div class="bg">${c.bg}</div>
+            <button class="bg-toggle" data-expanded="false">展开故事 ▼</button>
+          </div>
           <div class="stat-block">
             ${Object.entries(c.stats).map(([k, v]) => `
               <div class="stat-row">
@@ -1484,6 +1556,25 @@
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -10% 0px' });
     sections.forEach(s => io.observe(s));
+
+    // ============================================================
+    // MOBILE INTERACTIONS: collapsible sections, viewport fixes
+    // ============================================================
+    if (window.innerWidth <= 768) {
+      // Background story toggle
+      document.querySelectorAll('.bg-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const wrap = btn.parentElement;
+          const expanded = wrap.classList.toggle('expanded');
+          btn.textContent = expanded ? '收起 ▲' : '展开故事 ▼';
+          btn.dataset.expanded = expanded;
+        });
+      });
+      // Fix 100vh on mobile (address bar compensation)
+      const setVH = () => document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      setVH();
+      window.addEventListener('resize', setVH);
+    }
   </script>
 </body>
 </html>
